@@ -1,4 +1,7 @@
-# Anatel - Banda Larga Fixa no Brasil
+<img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" width="40" height="40"/>   <img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/plotly/plotly-original-wordmark.svg" width="40" height="40"/>  <img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/streamlit/streamlit-original-wordmark.svg" width="40" height="40"/>
+</br>
+</br>
+# Anatel - Banda Larga Fixa no Brasil :phone:
 Analises, Insights, Dashboards com os dados abertos da Anatel
 <br><br>
 Os dados apresentados referem-se aos acessos de Banda Larga Fixa (**SCM** - Serviço de Comunicação Multimídia), enviados pelas prestadoras do serviço.
