@@ -1,6 +1,9 @@
 # Anatel - Banda Larga Fixa no Brasil
 Analises, Insights, Dashboards com os dados abertos da Anatel
+<br><br>
+Os dados apresentados referem-se aos acessos de Banda Larga Fixa (**SCM** - Serviço de Comunicação Multimídia), enviados pelas prestadoras do serviço.
 
+O Serviço de Comunicação Multimídia é um serviço fixo de telecomunicações de interesse coletivo, prestado em âmbito nacional e internacional, no regime privado, que possibilita a oferta de capacidade de transmissão, emissão e recepção de informações multimídia, permitindo inclusive o provimento de conexão à internet, utilizando quaisquer meios, a Assinantes dentro de uma Área de Prestação de Serviço.
 # **<font color=#85d338> 1. Objetivo**
 >
 O mercado de banda larga fixa vem crescendo cada vez mais no Brasil, gerando uma grande concorrência entre empresas de telecomunicações.
