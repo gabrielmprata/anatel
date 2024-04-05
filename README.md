@@ -4,6 +4,10 @@
 </br>
 ![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge)
 </br>
+
+<img src="https://github.com/gabrielmprata/anatel/assets/119508139/cab6bd6a-d6c7-448d-affe-498196ed0654" alt="Dashboard"  height="350">
+
+
 # Anatel - Banda Larga Fixa no Brasil :phone:
 Analises, Insights, Dashboards com os dados abertos da Anatel
 <br><br>
