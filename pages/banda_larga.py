@@ -16,6 +16,7 @@ st.set_page_config(
     layout="wide"
 )
 
+
 #######################
 # Load data
 df_data = st.session_state["data"]
@@ -63,6 +64,7 @@ for feature in Brasil["features"]:
 # Choropleth map
 # Reaproveitando o dataframe df_UF_flag
 
+# Criando o grafico
 choropleth = px.choropleth_mapbox(
     df_UF_flag,  # database
     locations='UF',  # define os limites no mapa
@@ -93,6 +95,7 @@ choropleth.update_layout(
 # Ordenar o dataframe por UF para ordenar o eixo X
 df_data.sort_values(by='UF', ascending=True,inplace=True)
 
+# Criando o grafico
 heatmap = px.density_heatmap(df_data, 
                          x="UF", 
                          y="mes", 
@@ -124,6 +127,7 @@ df_meio_acesso = df_data.groupby(["mes","meio_acesso"])['Acessos'].sum().reset_i
 # Dataframe como o mês atual
 df_meio_acesso_pie = df_meio_acesso[(df_meio_acesso['mes'] == 12)]
 
+# Criando o grafico
 pie =   px.pie(df_meio_acesso_pie, 
              values='Acessos', 
              names='meio_acesso', 
@@ -139,7 +143,7 @@ pie.update_traces(textposition='outside',
 #######################
 # Line Chart
 
-
+# Criando o grafico
 line = px.line(df_meio_acesso, x='mes', y='Acessos',
               color='meio_acesso',
               markers=True,
@@ -160,6 +164,52 @@ line.update_xaxes(showspikes=True, spikecolor="black", spikesnap="cursor", spike
 line.update_yaxes(showspikes=True, spikecolor="blue", spikethickness=2)
 line.update_layout(spikedistance=1000, hoverdistance=100)
 
+#######################
+# Top 10 empresas
+#dataframe com o logo das operadoras
+img_oper = pd.read_csv('datasets/df_logo_oper.csv', encoding="utf_8", sep=';') #carrega dataset com o caminho das imagens
+
+#Dataframe agrupado por empresa em colunas
+acesso_bl_2023_col = pd.read_csv("datasets/banda_larga_fixa_2023_colunas.zip", compression='zip', index_col=0) 
+
+#Agrupando o dataframe por empresa
+acesso_hist = acesso_bl_2023_col.groupby(['empresa']).sum(['2023-01','2023-02','2023-03','2023-04','2023-05','2023-06','2023-07','2023-08','2023-09','2023-10','2023-11','2023-12']).reset_index()
+
+#Criando a coluna histórico
+acesso_hist["historico"] = "[" + acesso_hist["2023-01"].apply(str) + ", " + acesso_hist["2023-02"].apply(str) + ", " + acesso_hist["2023-03"].apply(str) + ", " + acesso_hist["2023-04"].apply(str)+ ", " + acesso_hist["2023-05"].apply(str) + ", " + acesso_hist["2023-06"].apply(str) + ", " + acesso_hist["2023-07"].apply(str) + ", " + acesso_hist["2023-08"].apply(str) + ", " + acesso_hist["2023-09"].apply(str) + ", " + acesso_hist["2023-10"].apply(str) + ", " + acesso_hist["2023-11"].apply(str) + ", " + acesso_hist["2023-12"].apply(str) + "]"
+
+#Sumarizado os acessos de 2023-12
+mkt_share_tot = sum(acesso_hist["2023-12"])
+
+#Calculando o Mkshare de 202312
+acesso_hist['market_share'] = ((acesso_hist['2023-12']/mkt_share_tot)*100).round(2)
+acesso_hist['ranking'] = (acesso_hist["2023-12"].rank(ascending = False)).astype(int)
+gr_mktshare = acesso_hist.sort_values(by='ranking', ascending=True).head(10)
+
+gr_mktshare = pd.merge(img_oper, gr_mktshare,  left_on='empresa', right_on='empresa')
+
+#######################
+# Evolução porte das operadoras
+#Dataframe agrupado por porte
+df_porte = df_data.groupby(["mes","porte_prestadora"])['Acessos'].sum().reset_index()
+
+# Criando o grafico
+gr_porte = px.line(df_porte, x='mes', y='Acessos',
+              color='porte_prestadora',
+              markers=True,
+              title=" ",
+              height=500, width=800, #altura x largura
+              labels=dict(porte_prestadora="Porte da Prestadora", mes="Mês"),
+              color_discrete_sequence=["#85d338", "green"],
+              #color_discrete_sequence=px.colors.sequential.Greens,
+              line_shape="spline",
+              template="plotly_white"
+              )
+gr_porte.update_layout(xaxis = dict(#linecolor='rgba(0,0,0,1)', # adicionando linha em y = 0
+                                tickmode = 'array', # alterando o modo dos ticks
+                                tickvals = df_porte['mes'], # setando a posição do tick de x
+                                ticktext = df_porte['mes']),# setando o valor do tick de x
+                                title_x = 0.5) #centralizando o titulo
 
 
 
@@ -185,8 +235,29 @@ with col[2]:
 col1 = st.columns((4.7, 3), gap='medium')
 
 with col1[0]:
-    st.markdown('### Histórico de Acessos')
-    st.plotly_chart(heatmap, use_container_width=True)
+    st.markdown('### Top 10 Operadoras')  
+    st.markdown('')  
+    
+    st.dataframe(
+        gr_mktshare,
+        column_order=("oper_logo", "empresa", "2023-12", "market_share", "ranking", "historico"),
+        column_config={
+            "oper_logo": st.column_config.ImageColumn(" ", width="small"),
+            "empresa": "Operadora",
+            "Acessos": "Acessos",
+            #"market_share": "Market Share", 
+            "market_share": st.column_config.NumberColumn(
+            "Market Share",
+            help="% de Participacão no mercado",
+            format="%.2f",
+        ),
+            "ranking": "Ranking",
+            "historico": st.column_config.LineChartColumn(
+            "Histórico 12 meses"
+        ),
+        },
+        hide_index=True,
+    )    
 
 with col1[1]:  
     st.markdown('### Top Estados')  
@@ -209,6 +280,11 @@ with col1[1]:
         hide_index=True,
     )
 
-st.markdown('### Evolução anual dos meios de acesso')      
+st.markdown('### Histórico de Acessos')
+st.plotly_chart(heatmap, use_container_width=True)
+
+st.markdown('### Evolução anual por meios de acesso')      
 st.plotly_chart(line, use_container_width=True)
 
+st.markdown('### Evolução dos acessos por Porte da Prestadora')
+st.plotly_chart(gr_porte, use_container_width=True)
