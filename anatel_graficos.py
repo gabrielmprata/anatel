@@ -14,6 +14,8 @@ Original file is located at
 >
 **Data**: 01/04/2024
 >
+**Última modificação**: 07/04/2024
+>
 ---
 
 ![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge)
@@ -51,6 +53,17 @@ url  = "https://raw.githubusercontent.com/gabrielmprata/anatel/main/datasets/ban
 acesso_bl_2023 = pd.read_csv(url, compression='zip')
 
 acesso_bl_2023.head()
+
+"""###**<font color=#85d338> 2.1 Agrupado por colunas**"""
+
+# importando dados de uma url para um dataframe
+
+# URL de importação
+url  = "https://raw.githubusercontent.com/gabrielmprata/anatel/main/datasets/banda_larga_fixa_2023_colunas.zip"
+
+acesso_bl_2023_col = pd.read_csv(url, compression='zip')
+
+acesso_bl_2023_col.head()
 
 """#**<font color=#85d338 size="6"> 3. Construção dos gráficos 📊**
 
@@ -111,6 +124,7 @@ fig0 = px.density_heatmap(acesso_bl_2023,
                          y="mes",
                          z="Acessos",
                          histfunc="sum",
+                         labels=dict(mes="Mês"),
                          color_continuous_scale="greens"
                          )
 
@@ -124,7 +138,10 @@ fig0.update_layout(yaxis = dict(
                                 coloraxis_showscale=False, # tira a legenda
                                 title_x = 0.5) #centralizando o titulo
 
-#fig0.update_layout(        )
+fig0.update_traces(hovertemplate='UF: %{x}<br>' +
+                                 'Mês: %{y}<br>' +
+                                 'Acessos: %{z}<br>'
+                   )
 
 fig0.show()
 
@@ -140,3 +157,113 @@ pv_faixa = pd.pivot_table(df_total_uf, index=['mes'], aggfunc='sum', columns=['U
 pv_faixa = pv_faixa.sort_values(by=['mes'], ascending=False)
 
 pv_faixa.style.background_gradient(cmap='Greens').format("{:,}")
+
+#Comando para pivot no Streamlit
+ st.dataframe(pv_faixa.style.background_gradient(cmap='Greens').format("{:,}"),
+                 height=500,
+                 use_container_width=True,
+                 width=1000)
+
+"""###**<font color=#85d338> 3.3 Pie Chart por Meio de acesso**"""
+
+# Dataframe agrupando por Meio acesso
+df_meio_acesso = acesso_bl_2023.groupby(["mes","meio_acesso"])['Acessos'].sum().reset_index()
+
+# Dataframe como o mês atual
+df_meio_acesso_pie = df_meio_acesso[(df_meio_acesso['mes'] == 12)]
+
+fig = px.pie(df_meio_acesso_pie,
+             values='Acessos',
+             names='meio_acesso',
+             labels=dict(meio_acesso="Meio de acesso"),
+             height=350, #altura
+             width=350,  #largura
+             color_discrete_sequence=px.colors.sequential.Greens_r
+             )
+fig.update_layout(showlegend=False)
+fig.update_traces(textposition='outside',
+                  textinfo='percent+label')
+fig.show()
+
+"""###**<font color=#85d338> 3.4 Line Chart evolução Meio de acesso**"""
+
+fig = px.line(df_meio_acesso, x='mes', y='Acessos',
+              color='meio_acesso',
+              markers=True,
+              height=500, width=800, #altura x largura
+              labels=dict(meio_acesso="Meio de acesso", mes="Mês"),
+              color_discrete_sequence=px.colors.sequential.Greens_r,
+              line_shape="spline",
+              template="plotly_white"
+              )
+fig.update_layout(xaxis = dict(linecolor='rgba(0,0,0,1)', # adicionando linha em y = 0
+                                tickmode = 'array', # alterando o modo dos ticks
+                                tickvals = df_meio_acesso['mes'], # setando a posição do tick de x
+                                ticktext = df_meio_acesso['mes']),# setando o valor do tick de x
+                                title_x = 0.5) #centralizando o titulo
+
+fig.update_xaxes(showspikes=True, spikecolor="black", spikesnap="cursor", spikemode="across")
+fig.update_yaxes(showspikes=True, spikecolor="blue", spikethickness=2)
+fig.update_layout(spikedistance=1000, hoverdistance=100)
+
+
+fig.show()
+
+"""###**<font color=#85d338> 3.5 Empresas com mais acesso em Banda Larga Fixa**"""
+
+#Dataframe agrupado por empresa
+mktshare = (acesso_bl_2023[['empresa', 'Acessos']]
+            [(acesso_bl_2023['mes'] == 12)]
+            ).groupby(['empresa'])['Acessos'].sum().reset_index()
+
+mktshare_tot = sum(mktshare.Acessos) #Total de acessos
+
+mktshare['market_share'] = ((mktshare['Acessos']/mktshare_tot)*100).round(2)
+mktshare['ranking'] = (mktshare["Acessos"].rank(ascending = False)).astype(int)
+gr_mktshare = mktshare.sort_values(by='market_share', ascending=False).head(10)
+
+gr_mktshare
+
+""">**<font color=#85d338>   Histórico por Empresas**
+
+Nosso objetivo aqui é criar uma coluna no dataframe com a série histórica dos acessos de cada empresa.
+>
+Dessa maneira, poderemos usar um elemento do Streamlit, para criar um mini gráfico (LineChartColumn) no grid de um dataframe.
+"""
+
+acesso_hist = acesso_bl_2023_col.groupby(['empresa']).sum(['2023-01','2023-02','2023-03','2023-04','2023-05','2023-06','2023-07','2023-08','2023-09','2023-10','2023-11','2023-12']).reset_index()
+
+#Criando a coluna historica no formato que o Streamlit determina para o mini grafico
+
+acesso_hist["historico"] = "[" + acesso_hist["2023-01"].apply(str) + ", " + acesso_hist["2023-02"].apply(str) + ", " + acesso_hist["2023-03"].apply(str) + ", " + acesso_hist["2023-04"].apply(str)+ ", " + acesso_hist["2023-05"].apply(str) + ", " + acesso_hist["2023-06"].apply(str) + ", " + acesso_hist["2023-07"].apply(str) + ", " + acesso_hist["2023-08"].apply(str) + ", " + acesso_hist["2023-09"].apply(str) + ", " + acesso_hist["2023-10"].apply(str) + ", " + acesso_hist["2023-11"].apply(str) + ", " + acesso_hist["2023-12"].apply(str) + "]"
+
+mkt_share_tot = sum(acesso_hist["2023-12"])
+
+acesso_hist['market_share'] = ((acesso_hist['2023-12']/mkt_share_tot)*100).round(2)
+acesso_hist['ranking'] = (acesso_hist["2023-12"].rank(ascending = False)).astype(int)
+gr_mktshare = acesso_hist.sort_values(by='ranking', ascending=True).head(10)
+gr_mktshare
+
+"""###**<font color=#85d338> 3.6 Evolução dos acessos por Porte da Prestadora**"""
+
+#Dataframe agrupado por porte
+df_porte = acesso_bl_2023.groupby(["mes","porte_prestadora"])['Acessos'].sum().reset_index()
+
+fig = px.line(df_porte, x='mes', y='Acessos',
+              color='porte_prestadora',
+              markers=True,
+              height=500, width=800, #altura x largura
+              labels=dict(porte_prestadora="Porte da Prestadora", mes="Mês"),
+              color_discrete_sequence=["#85d338", "green"],
+              #color_discrete_sequence=px.colors.sequential.Greens,
+              line_shape="spline",
+              template="plotly_white"
+              )
+fig.update_layout(xaxis = dict(#linecolor='rgba(0,0,0,1)', # adicionando linha em y = 0
+                                tickmode = 'array', # alterando o modo dos ticks
+                                tickvals = df_porte['mes'], # setando a posição do tick de x
+                                ticktext = df_porte['mes']),# setando o valor do tick de x
+                                title_x = 0.5) #centralizando o titulo
+
+
+fig.show()
