@@ -1,22 +1,29 @@
-<img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" width="40" height="40"/>   <img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/plotly/plotly-original-wordmark.svg" width="40" height="40"/>  <img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/streamlit/streamlit-original-wordmark.svg" width="40" height="40"/>
-</br>
-<img src="http://img.shields.io/static/v1?label=vers%C3%A3o%20do%20projeto&message=v1.0.0&color=red&style=for-the-badge&logo=github"/>
-</br>
-![Badge em Desenvolvimento](http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=GREEN&style=for-the-badge)
-</br>
+# :bar_chart: Anatel - Acessos de Banda Larga Fixa no Brasil :chart_with_upwards_trend:
 
+<p align="center">
+<img src="http://img.shields.io/static/v1?label=STATUS&message=EM%20DESENVOLVIMENTO&color=RED&style=for-the-badge" #vitrinedev/>  
+
+<img src="http://img.shields.io/static/v1?label=vers%C3%A3o%20do%20projeto&message=v1.0.0&color=red&style=for-the-badge&logo=github"/>
+</p>
+
+</br>
 <img src="https://github.com/gabrielmprata/anatel/assets/119508139/cab6bd6a-d6c7-448d-affe-498196ed0654" alt="Dashboard"  height="350">
 
-# Objetivo 💻
+# :radio_button: Objetivo 
 Criar um simples Dashboard em Python e Streamlit, para a visualização das informações do cenário de Banda Larga Fixa no Brasil.
 
-
-# Anatel - Banda Larga Fixa no Brasil :phone:
-Analises, Insights, Dashboards com os dados abertos da Anatel
 <br><br>
+# Ferramentas utilizadas
+<img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" width="40" height="40"/>   <img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/plotly/plotly-original-wordmark.svg" width="40" height="40"/>  <img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/streamlit/streamlit-original-wordmark.svg" width="40" height="40"/>
+
+<br><br>
+# Introdução
+
 Os dados apresentados nesse estudo acadêmico, referem-se aos acessos de Banda Larga Fixa (**SCM** - Serviço de Comunicação Multimídia), enviados pelas prestadoras do serviço.
 
 O Serviço de Comunicação Multimídia é um serviço fixo de telecomunicações de interesse coletivo, prestado em âmbito nacional e internacional, no regime privado, que possibilita a oferta de capacidade de transmissão, emissão e recepção de informações multimídia, permitindo inclusive o provimento de conexão à internet, utilizando quaisquer meios, a Assinantes dentro de uma Área de Prestação de Serviço.
+<br><br>
+
 # **<font color=#85d338> 1. Definição do problema**
 >
 O mercado de banda larga fixa vem crescendo cada vez mais no Brasil, gerando uma grande concorrência entre empresas de telecomunicações.
@@ -47,7 +54,7 @@ business intelligence.
 Como o nosso objetivo é criar um Dashboard com **Python** e **Streamlit**, iremos mnizar ao máximo o tamanho e a granularidade dos Datasets disponibilizados, a fim de termos um ambiente mais "leve" para a leitura dos dados.
 
 >
-## Instalção :floppy_disk:
+## :floppy_disk: Instalção 
 
 No terminal, clone o projeto: 
 
