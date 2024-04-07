@@ -7,7 +7,7 @@
 </p>
 
 </br>
-<img src="https://github.com/gabrielmprata/anatel/assets/119508139/cab6bd6a-d6c7-448d-affe-498196ed0654" alt="Dashboard"  height="350">
+<img src="https://github.com/gabrielmprata/anatel/assets/119508139/ff3e557e-c5f3-4fad-941c-6bb534f07298" alt="Dashboard"  height="350">
 
 # :radio_button: Objetivo 
 Criar um simples Dashboard em **Python** e **Streamlit**, para a visualização das informações do cenário de Banda Larga Fixa no Brasil.
