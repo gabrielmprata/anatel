@@ -18,7 +18,7 @@ Original file is located at
 >
 ---
 
-#**<font color=#85d338 size="6"> 1. Import libraries**
+#**<font color=#85d338 size="6"> Import libraries**
 """
 
 # Importação de pacotes
@@ -35,35 +35,64 @@ import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings("ignore")
 
-"""#**<font color=#85d338 size="6"> 2. Carga dos dados**
+"""#**<font color=#85d338 size="6"> 1. Objetivo**
+
+Nosso objetivo é tratar o arquivo, utilizando técnicas de Pré processamento de dados, e disponibilizar um arquivo .......
+
+#**<font color=#85d338 size="6"> 2. Carga dos dados**
 
 As informações de acessos de **Banda Larga Fixa**, estão no sítio de dados abertos do governo federal, no link abaixo:
 >
 https://dados.gov.br/dados/conjuntos-dados/acessos---banda-larga-fixa
+
 >
-Será baixado um arquivo ZIP com todos os anos disponíveis.
+É disponibilizado um arquivo ZIP com todos os anos disponíveis.
 >
-Para esse projeto, selecionamos os seguintes arquivos de **2023**, para tratar:
+Para esse projeto o arquivo foi coletado no dia **08/04/2024**.
 >
+Selecionamos os seguintes arquivos de **2023**, para tratar:
+>
+```
 Acessos_Banda_Larga_Fixa_2023.zip
->
+
 Acessos_Banda_Larga_Fixa_2023_Colunas.zip
+```
+>
+E o arquivo de **2022**, para analisar a evolução:
+>
+```
+Acessos_Banda_Larga_Fixa_2022.zip
+```
 
-
-
----
+<font color=red>✋ ‼ Atenção ‼ ✋
+>
+Os arquivos são **atualizados** no sitio da Anatel, e com isso a versão que você pode estar utilizando, pode ser diferente da minha, mesmo que seja o mesmo ano.
 
 ###**<font color=#85d338> 2.1 Arquivo Acessos_Banda_Larga_Fixa_2023.zip**
 
 Esse arquivo contém as informações detalhadas em tuplas.
 """
 
-#Arquivo detalhado com os meses em linhas #executado em 34s
+#Arquivo de 2023detalhado com os meses em linhas #executado em 34s
 acesso_bl_2023 = pd.read_csv('Acessos_Banda_Larga_Fixa_2023.zip', compression='zip', sep=';', decimal=',')
 
 acesso_bl_2023.info()
 
 acesso_bl_2023.head()
+
+#Arquivo de 2022 detalhado com os meses em linhas #executado em 25s
+acesso_bl_2022 = pd.read_csv('Acessos_Banda_Larga_Fixa_2022.zip', compression='zip', sep=';', decimal=',')
+
+"""No dataset de 2022, só temos interesse no mês de **DEZEMBRO**.
+>
+Vamos criar um Dataframe selecionado, e depois concatenar com o Dataframe de 2023.
+"""
+
+acesso_bl_2022 = acesso_bl_2022[(acesso_bl_2022['Mês'] == 12)].copy()
+
+"""Utilizei a função "concat" para juntar os DataFranes, em apenas um."""
+
+acesso_bl_2023 = pd.concat([acesso_bl_2023, acesso_bl_2022],sort=False, ignore_index=True)
 
 """###**<font color=#85d338> 2.2 Arquivo Acessos_Banda_Larga_Fixa_2023_Colunas.zip**
 
@@ -111,7 +140,7 @@ Usando o parâmetro memory_usage = “deep”, saberemos exatamente quanto de me
 >
 Sendo assim, depois dos processos de transformações de dados saberemos se tivemos algum ganho de memoria no dataframe.
 >
-Inicialmente o dataframe detalhado está ocupando 5.2 Gigas de espaço.
+Inicialmente o dataframe detalhado está ocupando 5.6 Gigas de espaço.
 >
 O dataframe agrupado por coluna está ocupando 700 Mb de espaço.
 """
