@@ -42,9 +42,7 @@ df_total_ant['Acessos'] = ((df_total_ant['Acessos'])/1000000).round(1)
 # Quantidade de acesso por estado, com bandeira e progress column
 UF_flag = pd.read_csv('datasets/UF_flags.csv', encoding="utf_8", sep=';') #carrega dataset com o caminho das imagens
 
-df_UF = df_data.groupby(["UF","mes"])['Acessos'].sum().reset_index()
-
-df_UF_flag = df_UF[(df_UF['mes'] == 12)].groupby(["UF"])['Acessos'].sum().reset_index()
+df_UF_flag = df_data[(df_data['mes'] == 12) & (df_data['ano'] == 2023)].groupby(["UF"])['Acessos'].sum().reset_index()
 df_UF_flag_data = pd.merge(UF_flag, df_UF_flag,  left_on='uf', right_on='UF')
 df_UF_flag_data = df_UF_flag_data.sort_values(by='Acessos', ascending=False)
 
@@ -77,7 +75,7 @@ choropleth = px.choropleth_mapbox(
     center={"lat": -14, "lon": -55},  # define os limites para plotar
     zoom=2.5,  # zoom inicial no mapa
     color_continuous_scale="greens",  # cor dos estados
-    range_color=(0, max(df_UF_flag.Acessos)),  # Intervalo da legenda
+    #range_color=(0, max(df_UF_flag.Acessos)),  # Intervalo da legenda
     opacity=0.5  # opacidade da cor do mapa, para aparecer o fundo
 )
 
@@ -89,59 +87,64 @@ choropleth.update_layout(
     height=350
 )
 
-# Heatmap
+# Evolução doas acessos com a variação por %
 #######################
 
-# Ordenar o dataframe por UF para ordenar o eixo X
-df_data.sort_values(by='UF', ascending=True,inplace=True)
+hist_acesso = df_data.groupby(["ano","mes"])['Acessos'].sum().reset_index()
 
-# Criando o grafico
-heatmap = px.density_heatmap(df_data, 
-                         x="UF", 
-                         y="mes", 
-                         z="Acessos", 
-                         histfunc="sum", 
-                         color_continuous_scale="greens"
-                         )
+hist_acesso['Acessos'] = ((hist_acesso['Acessos'])/1000000).round(2)
 
-heatmap.update_layout(yaxis = dict(
-                                tickmode = 'array', # alterando o modo dos ticks
-                                tickvals = df_data['mes'], # setando a posição do tick de x
-                                ticktext = df_data['mes']),# setando o valor do tick de x
-                                title="",
-                                xaxis_title="",
-                                yaxis_title="",
-                                coloraxis_showscale=False # tira a legenda
-                    ) 
+hist_acesso['ano_mes'] = hist_acesso['ano'].map(str) + hist_acesso['mes'].map(str)
 
-heatmap.update_traces(hovertemplate='UF: %{x}<br>' +
-                                 'Mês: %{y}<br>' +
-                                 'Acessos: %{z}<br>'
-                   )
+hist_acesso.ano_mes =  hist_acesso.ano_mes.replace('20231','202301')
+hist_acesso.ano_mes =  hist_acesso.ano_mes.replace('20232','202302')
+hist_acesso.ano_mes =  hist_acesso.ano_mes.replace('20233','202303')
+hist_acesso.ano_mes =  hist_acesso.ano_mes.replace('20234','202304')
+hist_acesso.ano_mes =  hist_acesso.ano_mes.replace('20235','202305')
+hist_acesso.ano_mes =  hist_acesso.ano_mes.replace('20236','202306')
+hist_acesso.ano_mes =  hist_acesso.ano_mes.replace('20237','202307')
+hist_acesso.ano_mes =  hist_acesso.ano_mes.replace('20238','202308')
+hist_acesso.ano_mes =  hist_acesso.ano_mes.replace('20239','202309')
 
-#######################
-# Pie Chart
-# Dataframe agrupando por Meio acesso
-df_meio_acesso = df_data.groupby(["mes","meio_acesso"])['Acessos'].sum().reset_index()
+hist_acesso['acesso_ant'] = hist_acesso.Acessos.shift(1)
+hist_acesso['var_acesso'] = (((hist_acesso['Acessos']/hist_acesso['acesso_ant'])*100)-100).round(2)
 
-# Dataframe como o mês atual
-df_meio_acesso_pie = df_meio_acesso[(df_meio_acesso['mes'] == 12)]
 
-# Criando o grafico
-pie =   px.pie(df_meio_acesso_pie, 
-             values='Acessos', 
-             names='meio_acesso', 
-             height=350, #altura
-             width=300,  #largura
-             labels=dict(meio_acesso="Meio de acesso"),
-             color_discrete_sequence=px.colors.sequential.Greens_r
+hist = px.bar(hist_acesso, x="ano_mes", y="Acessos",
+             template="plotly_white",
+             text_auto=True,
+             height=300,   #altura
+             #width=1000,  #largura
+             color_discrete_sequence=px.colors.sequential.Greens,
+             title = " ",
+             labels=dict(ano_mes=" Ano Mês", Acessos = "Acessos (MM)")
              )
-pie.update_layout(showlegend=False)
-pie.update_traces(textposition='outside',
-                  textinfo='percent+label')
-                  
+
+hist.update_yaxes(showticklabels=False)
+hist.update_yaxes(showgrid=False)
+hist.update_layout(margin=dict(l=5, r=5, t=15, b=0)) #centralizando o titulo
+
+hist2 = px.bar(hist_acesso, x="ano_mes", y="var_acesso",
+             template="plotly_white",
+             text_auto=True,
+             height=300, #altura
+             #width=1000,  #largura
+             color_discrete_sequence=px.colors.sequential.Greens,
+             labels=dict(mes="Mês", var_acesso = "Acessos"),
+             title = "Variação MxM(%)")
+hist2.update_traces(textposition='outside')
+hist2.update_yaxes(showticklabels=False)
+hist2.update_xaxes(showgrid=False)
+hist2.update_yaxes(showgrid=False)
+#hist2.update_layout()
+hist2.update_xaxes(visible=True, fixedrange=True)
+hist2.update_yaxes(visible=False, fixedrange=True)
+
+
 #######################
-# Line Chart
+# Evolução por meio de acesso Line Chart
+# Dataframe agrupando por Meio acesso
+df_meio_acesso = df_data[(df_data['ano'] == 2023)].groupby(["ano","mes","meio_acesso"])['Acessos'].sum().reset_index()
 
 # Criando o grafico
 line = px.line(df_meio_acesso, x='mes', y='Acessos',
@@ -163,6 +166,25 @@ line.update_layout(xaxis = dict(linecolor='rgba(0,0,0,1)', # adicionando linha e
 line.update_xaxes(showspikes=True, spikecolor="black", spikesnap="cursor", spikemode="across")
 line.update_yaxes(showspikes=True, spikecolor="blue", spikethickness=2)
 line.update_layout(spikedistance=1000, hoverdistance=100)
+
+#######################
+# Pie Chart por meio de acesso
+
+# Dataframe como o mês atual
+df_meio_acesso_pie = df_meio_acesso[(df_meio_acesso['mes'] == 12) & (df_meio_acesso['ano'] == 2023)]
+
+# Criando o grafico
+pie =   px.pie(df_meio_acesso_pie, 
+             values='Acessos', 
+             names='meio_acesso', 
+             height=350, #altura
+             width=350,  #largura
+             labels=dict(meio_acesso="Meio de acesso"),
+             color_discrete_sequence=px.colors.sequential.Greens_r
+             )
+pie.update_layout(showlegend=False)
+pie.update_traces(textposition='outside',
+                  textinfo='percent+label')
 
 #######################
 # Top 10 empresas
@@ -191,14 +213,14 @@ gr_mktshare = pd.merge(img_oper, gr_mktshare,  left_on='empresa', right_on='empr
 #######################
 # Evolução porte das operadoras
 #Dataframe agrupado por porte
-df_porte = df_data.groupby(["mes","porte_prestadora"])['Acessos'].sum().reset_index()
+df_porte = df_data[(df_data['ano'] == 2023)].groupby(["mes","porte_prestadora"])['Acessos'].sum().reset_index()
 
 # Criando o grafico
 gr_porte = px.line(df_porte, x='mes', y='Acessos',
               color='porte_prestadora',
               markers=True,
               title=" ",
-              height=500, width=800, #altura x largura
+              height=500, #width=800, #altura x largura
               labels=dict(porte_prestadora="Porte da Prestadora", mes="Mês"),
               color_discrete_sequence=["#85d338", "green"],
               #color_discrete_sequence=px.colors.sequential.Greens,
@@ -215,7 +237,7 @@ gr_porte.update_layout(xaxis = dict(#linecolor='rgba(0,0,0,1)', # adicionando li
 
 #######################
 # Dashboard Main Panel
-col = st.columns((1.2, 3.5, 3.5), gap='medium')
+col = st.columns((1.3, 3.5, 3.9))
 
 
 with col[0]:
@@ -231,8 +253,9 @@ with col[1]:
 with col[2]:
     st.markdown('### Meio de Acesso')
     st.plotly_chart(pie, use_container_width=True)
-    
-col1 = st.columns((4.7, 3), gap='medium')
+
+#### Segunda tabela    
+col1 = st.columns((4.7, 2.5), gap='medium')
 
 with col1[0]:
     st.markdown('### Top 10 Operadoras')  
@@ -280,11 +303,15 @@ with col1[1]:
         hide_index=True,
     )
 
-st.markdown('### Histórico de Acessos')
-st.plotly_chart(heatmap, use_container_width=True)
+st.markdown('### Histórico de Acessos com variação MxM')
+st.plotly_chart(hist, use_container_width=True)
+st.plotly_chart(hist2, use_container_width=True)
 
-st.markdown('### Evolução anual por meios de acesso')      
+st.markdown('### Evolução por meios de acesso')      
 st.plotly_chart(line, use_container_width=True)
 
 st.markdown('### Evolução dos acessos por Porte da Prestadora')
 st.plotly_chart(gr_porte, use_container_width=True)
+
+####################################################
+
