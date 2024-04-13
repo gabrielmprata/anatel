@@ -22,22 +22,6 @@ st.set_page_config(
 df_data = st.session_state["data"]
 
 
-# Dataframes auxiliares
-
-#######################
-# Quadro com o total e a variação
-
-df_total_ant = df_data.groupby(["ano", "mes"])['Acessos'].sum().reset_index()
-df_total_ant['acesso_ant'] = df_total_ant.Acessos.shift(1)
-df_total_ant['var_acesso'] = df_total_ant['Acessos']-df_total_ant['acesso_ant']
-df_total_ant['acesso_ant'].fillna(0, inplace=True)
-df_total_ant['var_acesso'].fillna(0, inplace=True)
-df_total_ant['acesso_ant'] = df_total_ant['acesso_ant'].astype(int)
-df_total_ant['var_acesso'] = (
-    df_total_ant['var_acesso'].astype(int)/1000).round(1)
-
-df_total_ant['Acessos'] = ((df_total_ant['Acessos'])/1000000).round(1)
-
 #######################
 # Quantidade de acesso por estado, com bandeira e progress column
 UF_flag = pd.read_csv('datasets/UF_flags.csv', encoding="utf_8", sep=';') #carrega dataset com o caminho das imagens
@@ -87,9 +71,11 @@ choropleth.update_layout(
     height=350
 )
 
-# Evolução doas acessos com a variação por %
-#######################
 
+#######################
+# Bar chart com a evolução e a variação
+
+# Dataframes auxiliares
 hist_acesso = df_data.groupby(["ano","mes"])['Acessos'].sum().reset_index()
 
 hist_acesso['Acessos'] = ((hist_acesso['Acessos'])/1000000).round(2)
@@ -107,8 +93,13 @@ hist_acesso.ano_mes =  hist_acesso.ano_mes.replace('20238','202308')
 hist_acesso.ano_mes =  hist_acesso.ano_mes.replace('20239','202309')
 
 hist_acesso['acesso_ant'] = hist_acesso.Acessos.shift(1)
-hist_acesso['var_acesso'] = (((hist_acesso['Acessos']/hist_acesso['acesso_ant'])*100)-100).round(2)
+hist_acesso['var_acesso'] = hist_acesso['Acessos']-hist_acesso['acesso_ant']
+hist_acesso['var_acesso_perc'] = (((hist_acesso['Acessos']/hist_acesso['acesso_ant'])*100)-100).round(2)
 
+var_ano = (hist_acesso.Acessos.values[12]-hist_acesso.Acessos.values[0]).round(2)
+
+
+# construindo os gráficos
 
 hist = px.bar(hist_acesso, x="ano_mes", y="Acessos",
              template="plotly_white",
@@ -124,19 +115,18 @@ hist.update_yaxes(showticklabels=False)
 hist.update_yaxes(showgrid=False)
 hist.update_layout(margin=dict(l=5, r=5, t=15, b=0)) #centralizando o titulo
 
-hist2 = px.bar(hist_acesso, x="ano_mes", y="var_acesso",
+hist2 = px.bar(hist_acesso, x="ano_mes", y="var_acesso_perc",
              template="plotly_white",
              text_auto=True,
-             height=300, #altura
+             height=350, #altura
              #width=1000,  #largura
              color_discrete_sequence=px.colors.sequential.Greens,
-             labels=dict(mes="Mês", var_acesso = "Acessos"),
+             labels=dict(mes="Mês", var_acesso_perc = "Variação(%)"),
              title = "Variação MxM(%)")
 hist2.update_traces(textposition='outside')
 hist2.update_yaxes(showticklabels=False)
 hist2.update_xaxes(showgrid=False)
 hist2.update_yaxes(showgrid=False)
-#hist2.update_layout()
 hist2.update_xaxes(visible=True, fixedrange=True)
 hist2.update_yaxes(visible=False, fixedrange=True)
 
@@ -241,10 +231,10 @@ col = st.columns((1.3, 3.5, 3.9))
 
 
 with col[0]:
-
+    #######################
+    # Quadro com o total e a variação
     st.markdown('### Total Acessos')
-    st.metric(label="", value=str(
-        df_total_ant.Acessos.values[11])+" M", delta=str(df_total_ant.var_acesso.values[11])+"K")
+    st.metric(label="", value=str((hist_acesso.Acessos.values[12]).round(1))+" M", delta=str(var_ano)+"M")
 
 with col[1]:
     st.markdown('###')
@@ -314,4 +304,3 @@ st.markdown('### Evolução dos acessos por Porte da Prestadora')
 st.plotly_chart(gr_porte, use_container_width=True)
 
 ####################################################
-
