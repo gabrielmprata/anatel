@@ -54,7 +54,14 @@ Após coletar e analisar os dados naetapa anterior, é necessário limpar,transf
 business intelligence.
 >
 Como o nosso objetivo é criar um Dashboard com **Python** e **Streamlit**, iremos mnizar ao máximo o tamanho e a granularidade dos Datasets disponibilizados, a fim de termos um ambiente mais "leve" para a leitura dos dados.
-
+>
+Principais técnicas utilizadas:
+>
+**Limpeza:** Consiste na verifi cação da consistência das informações,correção de possíveis erros de preenchimento ou eliminação de valores desconhecidos,redundantes ou não pertencentes ao domínio
+>
+**Agregação:** Também pode ser considerada uma técnica de redução de dimensionalidade, pois reduz o número de linhas e colunas de um dataset.
+>
+**Tratamendo de dados faltantes (missing):** Identificamos e, em seguida, tratamos com um valor adequado. Não foi necessario a exclusão desses registros.
 >
 ## :floppy_disk: Instalção 
 
