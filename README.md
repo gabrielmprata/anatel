@@ -76,14 +76,18 @@ O estado de São Paulo é o que concentra o maior número de acessos, cerca de 1
 <br></br>
 
 Os acessos de **Fibra Óptica** dominam o mercado brasileiro, com 36 milhões de instalações, representando 74,4%.
-
+<img src="https://github.com/gabrielmprata/anatel/assets/119508139/9508e982-4dc2-4cc6-a433-721bf5dfb37b" alt="Meio de Acesso"  height="200">
 <br></br>
 As empresas de pequeno porte (PPPs), continuam crescendo cada vez mais, ultrapassando as empresas de grande porte, conquistando 54% do mercado brasileiro.
+>
+<img src="https://github.com/gabrielmprata/anatel/assets/119508139/e0f258de-4aaf-47d6-b840-f5dcde7c0b77" alt="Porte"  height="200">
+<br></br>
+
+No nosso próximo estudo iremos detalhar o mercado de **Fibra óptica**!
 
 <br></br>
-No nosso próximo estudo iremos detalhar o mercado de **Fibra óptica**! 
 Até breve!
-
+<br></br>
 ## :floppy_disk: Instalção 
 
 No terminal, clone o projeto: 
@@ -93,3 +97,4 @@ git clone https://github.com/gabrielmprata/Anatel.git
 ```
 
 ... 
+
