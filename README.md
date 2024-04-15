@@ -65,6 +65,25 @@ Principais técnicas utilizadas:
 >
 # **<font color=#85d338> 4. Apresentação dos resultados**
 >
+A Anatel divulgou os números de banda larga fixa, informados pelas operadoras de telefonia,  e no ano de 2023 o Brasil chegou a marca de 48,4 milhões de acessos instalados.
+>
+Em relação ao ano de 2023 o mercado cresceu apenas 6,3%.
+Claro e Vivo, lideram o ranking entre as operados, com 20,6% e 13,9% de Market Share.
+>
+O estado de São Paulo é o que concentra o maior número de acessos, cerca de 14,6 milhões, concentrando 30% do mercado, seguido de Minas Gerais com 5,4 milhões de acessos e 11% do mercado brasileiro.
+>
+<img src="https://github.com/gabrielmprata/anatel/assets/119508139/7e2eb4b5-63d7-4d72-b675-7b6c906c9647" alt="Top"  height="200">
+<br></br>
+
+Os acessos de **Fibra Óptica** dominam o mercado brasileiro, com 36 milhões de instalações, representando 74,4%.
+
+<br></br>
+As empresas de pequeno porte (PPPs), continuam crescendo cada vez mais, ultrapassando as empresas de grande porte, conquistando 54% do mercado brasileiro.
+
+<br></br>
+No nosso próximo estudo iremos detalhar o mercado de **Fibra óptica**! 
+Até breve!
+
 ## :floppy_disk: Instalção 
 
 No terminal, clone o projeto: 
