@@ -6,7 +6,7 @@ import streamlit as st
 import plotly.express as px
 import webbrowser
 import pandas as pd
-from st_aggrid import AgGrid
+#from st_aggrid import AgGrid
 
 #######################
 # Configuração da página
