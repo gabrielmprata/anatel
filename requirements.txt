@@ -2,3 +2,7 @@ streamlit
 pandas
 altair
 plotly
+json
+webbrowser
+st_aggrid
+AgGrid
