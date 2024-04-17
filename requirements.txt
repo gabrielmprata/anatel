@@ -4,5 +4,4 @@ altair
 plotly
 json
 webbrowser
-st_aggrid
-AgGrid
+streamlit-aggrid
