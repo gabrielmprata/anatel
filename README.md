@@ -55,6 +55,8 @@ https://informacoes.anatel.gov.br/paineis/acessos
 >
 # **<font color=#85d338> 3. Pré-porcessamento**
 >
+[![Colab Notebook](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gabrielmprata/anatel/blob/main/Anatel_PreProcessamento.ipynb)
+>
 Esta é a etapa mais demorada e trabalhosa do projeto de ciência de dados, e estima-se que consuma pelo menos 70% do tempo total do projeto.
 >
 Após coletar e analisar os dados naetapa anterior, é necessário limpar,transformar e apresentar melhor os seus dados, a fim de obter, na próxima etapa, os melhores resultados possíveis nos algoritmos de machine learning ou simplesmente apresentar dados mais confiáveis para os clientes em soluções de
@@ -71,6 +73,8 @@ Principais técnicas utilizadas:
 **Tratamendo de dados faltantes (missing):** Identificamos e, em seguida, tratamos com um valor adequado. Não foi necessario a exclusão desses registros.
 >
 # **<font color=#85d338> 4. Apresentação dos resultados**
+>
+[![Colab Notebook](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gabrielmprata/anatel/blob/main/Anatel_Graficos.ipynb)
 >
 A Anatel divulgou os números de banda larga fixa, informados pelas operadoras de telefonia,  e no ano de 2023 o Brasil chegou a marca de 48,4 milhões de acessos instalados.
 >
