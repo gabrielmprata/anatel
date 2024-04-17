@@ -3,7 +3,7 @@
 import streamlit as st
 import webbrowser
 import pandas as pd
-
+from streamlit.components.v1 import html
 
 #######################
 # Configuração da página
@@ -12,6 +12,9 @@ st.set_page_config(
     page_icon=":phone:",
     layout="wide"
 )
+
+#######################
+# CSS styling
 
 # Criando estilo CSS para o botão
 m = st.markdown("""
@@ -37,16 +40,14 @@ div.stButton > button:hover {
 </style>""", unsafe_allow_html=True)
 
 
-st.markdown(
-    f"""
-        <style>
-            .sidebar .sidebar-content {{
-                width: 200px;
-            }}
-        </style>
-    """,
-    unsafe_allow_html=True
-)
+def open_page(url):
+    open_script= """
+        <script type="text/javascript">
+            window.open('%s', '_blank').focus();
+        </script>
+    """ % (url)
+    html(open_script)
+
 
 #######################
 # Carregando dataset
@@ -81,8 +82,4 @@ A ANATEL(Agência Nacional de Telecomunicações) divulgou em seu portal de dado
 
 st.markdown("# Coleta dos Dados")
 st.markdown(""" Os dados foram coletados no sítio da Agência """)
-btn = st.button("Acesse Dados.gov.br", type="primary")
-if btn:
-    webbrowser.open_new_tab(
-        "https://dados.gov.br/dados/conjuntos-dados/acessos---banda-larga-fixa")
-
+st.button('Acesse Dados.gov.br', on_click=open_page, args=('https://dados.gov.br/dados/conjuntos-dados/acessos---banda-larga-fixa',))
