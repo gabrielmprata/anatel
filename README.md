@@ -59,14 +59,14 @@ https://informacoes.anatel.gov.br/paineis/acessos
 >
 Esta é a etapa mais demorada e trabalhosa do projeto de ciência de dados, e estima-se que consuma pelo menos 70% do tempo total do projeto.
 >
-Após coletar e analisar os dados naetapa anterior, é necessário limpar,transformar e apresentar melhor os seus dados, a fim de obter, na próxima etapa, os melhores resultados possíveis nos algoritmos de machine learning ou simplesmente apresentar dados mais confiáveis para os clientes em soluções de
+Após coletar e analisar os dados na etapa anterior, é necessário limpar, transformar e apresentar melhor os seus dados, a fim de obter, na próxima etapa, os melhores resultados possíveis nos algoritmos de machine learning ou simplesmente apresentar dados mais confiáveis para os clientes em soluções de
 business intelligence.
 >
-Como o nosso objetivo é criar um Dashboard com **Python** e **Streamlit**, iremos mnizar ao máximo o tamanho e a granularidade dos Datasets disponibilizados, a fim de termos um ambiente mais "leve" para a leitura dos dados.
+Como o nosso objetivo é criar um Dashboard com **Python** e **Streamlit**, iremos minimizar ao máximo o tamanho e a granularidade dos Datasets disponibilizados, a fim de termos um ambiente mais "leve" para a leitura dos dados.
 >
 Principais técnicas utilizadas:
 >
-**Limpeza:** Consiste na verifi cação da consistência das informações,correção de possíveis erros de preenchimento ou eliminação de valores desconhecidos,redundantes ou não pertencentes ao domínio
+**Limpeza:** Consiste na verificação da consistência das informações, correção de possíveis erros de preenchimento ou eliminação de valores desconhecidos, redundantes ou não pertencentes ao domínio.
 >
 **Agregação:** Também pode ser considerada uma técnica de redução de dimensionalidade, pois reduz o número de linhas e colunas de um dataset.
 >
