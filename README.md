@@ -53,7 +53,7 @@ Os dados foram coletados do sítio da Agência Nacional de Telecomunicações.<i
 https://informacoes.anatel.gov.br/paineis/acessos
 <br>
 >
-# **<font color=#85d338> 3. Pré-porcessamento**
+# **<font color=#85d338> 3. Pré-processamento**
 >
 [![Colab Notebook](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/gabrielmprata/anatel/blob/main/Anatel_PreProcessamento.ipynb)
 >
